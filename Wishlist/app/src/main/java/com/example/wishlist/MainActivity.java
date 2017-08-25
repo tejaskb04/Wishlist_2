@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                progressDialog.hide();
                                 Toast.makeText(MainActivity.this, "Registered Successfully",
                                         Toast.LENGTH_SHORT).show();
                                 // Create UserAreaActivity
