@@ -2,6 +2,7 @@ package com.example.wishlist;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,7 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class LoginActivity extends AppCompatActivity {
+    private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
     private Button loginBtn;
     private EditText editTextEmail;
@@ -22,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(LoginActivity.this);
         loginBtn = (Button) findViewById(R.id.login);
         editTextEmail = (EditText) findViewById(R.id.email);
@@ -48,7 +56,22 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "There are one or more empty fields.",
                     Toast.LENGTH_SHORT).show();
         }
-        progressDialog.setMessage("Logging In...");
-        progressDialog.show();
+        else {
+            progressDialog.setMessage("Logging In...");
+            progressDialog.show();
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                progressDialog.hide();
+                            } else {
+                                progressDialog.hide();
+                                Toast.makeText(LoginActivity.this, "Login Failed",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 }
