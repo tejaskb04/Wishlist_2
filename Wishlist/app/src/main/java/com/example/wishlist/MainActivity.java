@@ -1,6 +1,7 @@
 package com.example.wishlist;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         textViewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create and Route to LoginActivity
+                finish();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
     }
@@ -68,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                                 // Create UserAreaActivity
                             } else {
+                                progressDialog.hide();
                                 Toast.makeText(MainActivity.this, "Failed to Register",
-                                        Toast.LENGTH_LONG).show();
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
