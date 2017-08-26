@@ -30,6 +30,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAuth = FirebaseAuth.getInstance();
+        // EDGY CODE BELOW
+        /*if (firebaseAuth.getCurrentUser() != null) {
+            startActivity(new Intent(LoginActivity.this, UserAreaActivity.class));
+        }*/
         progressDialog = new ProgressDialog(LoginActivity.this);
         loginBtn = (Button) findViewById(R.id.login);
         editTextEmail = (EditText) findViewById(R.id.email);
@@ -64,9 +68,11 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                progressDialog.hide();
+                                progressDialog.dismiss();
+                                finish();
+                                startActivity(new Intent(LoginActivity.this, UserAreaActivity.class));
                             } else {
-                                progressDialog.hide();
+                                progressDialog.dismiss();
                                 Toast.makeText(LoginActivity.this, "Login Failed",
                                         Toast.LENGTH_SHORT).show();
                             }

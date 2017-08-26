@@ -65,12 +65,13 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                progressDialog.hide();
+                                progressDialog.dismiss();
                                 Toast.makeText(MainActivity.this, "Registered Successfully",
                                         Toast.LENGTH_SHORT).show();
-                                // Create UserAreaActivity
+                                finish();
+                                startActivity(new Intent(MainActivity.this, UserAreaActivity.class));
                             } else {
-                                progressDialog.hide();
+                                progressDialog.dismiss();
                                 Toast.makeText(MainActivity.this, "Failed to Register",
                                         Toast.LENGTH_SHORT).show();
                             }
