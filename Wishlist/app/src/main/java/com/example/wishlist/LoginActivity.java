@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         // EDGY CODE BELOW
         /*if (firebaseAuth.getCurrentUser() != null) {
+            finish();
             startActivity(new Intent(LoginActivity.this, UserAreaActivity.class));
         }*/
         progressDialog = new ProgressDialog(LoginActivity.this);
