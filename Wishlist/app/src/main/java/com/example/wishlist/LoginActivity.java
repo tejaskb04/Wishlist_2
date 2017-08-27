@@ -16,9 +16,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
     private ProgressDialog progressDialog;
     private Button loginBtn;
     private EditText editTextEmail;
@@ -30,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         // EDGY CODE BELOW
         /*if (firebaseAuth.getCurrentUser() != null) {
             finish();
@@ -55,8 +60,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void userLogin() {
-        String email = editTextEmail.getText().toString();
-        String password = editTextPassword.getText().toString();
+        final String email = editTextEmail.getText().toString();
+        final String password = editTextPassword.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(LoginActivity.this, "There are one or more empty fields.",
                     Toast.LENGTH_SHORT).show();
@@ -69,6 +74,10 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                                String userId = firebaseUser.getUid();
+                                User user = new User(email, password);
+                                databaseReference.child("users").child(userId).setValue(user);
                                 progressDialog.dismiss();
                                 finish();
                                 startActivity(new Intent(LoginActivity.this, UserAreaActivity.class));
